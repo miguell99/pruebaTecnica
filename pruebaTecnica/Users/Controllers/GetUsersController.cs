@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pruebaTecnica.Users.aplication;
 
-namespace pruebaTecnica.Users.infraestructure
+namespace pruebaTecnica.Users.Controllers
 {
     [ApiController]
     [Route("[controller]")]

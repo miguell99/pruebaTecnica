@@ -1,6 +1,5 @@
 using pruebaTecnica.Users.aplication;
 using pruebaTecnica.Users.domain;
-using pruebaTecnica.Users.infraestructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

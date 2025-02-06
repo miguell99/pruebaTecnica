@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Moq;
 using pruebaTecnica.Users.aplication;
 using pruebaTecnica.Users.domain;
-using pruebaTecnica.Users.infraestructure;
 
 namespace pruebaTecnica.test
 {

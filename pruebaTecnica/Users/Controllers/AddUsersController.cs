@@ -2,7 +2,7 @@
 using pruebaTecnica.Users.aplication;
 using pruebaTecnica.Users.domain;
 
-namespace pruebaTecnica.Users.infraestructure
+namespace pruebaTecnica.Users.Controllers
 {
     [ApiController]
     [Route("[controller]")]
