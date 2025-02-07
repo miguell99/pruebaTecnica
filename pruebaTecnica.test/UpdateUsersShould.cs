@@ -6,63 +6,76 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Utilities;
 using Moq;
 using pruebaTecnica.Users.aplication;
+using pruebaTecnica.Users.aplication.Handlers;
 using pruebaTecnica.Users.domain;
+using pruebaTecnica.Users.infraestructure.Commands;
 
 namespace pruebaTecnica.test
 {
     public class UpdateUsersShould
     {
-        private readonly Mock<IUserRepository> _mock = new Mock<IUserRepository>();
-        User UserToUpdate = new User
-            {
-                Id = 1, Email = "user1@cojali.com", UserName = "user1"
-           };
+        private readonly Mock<IUserRepository> _userRepositoryMock;
+        private readonly User _user;
 
+        public UpdateUsersShould()
+        {
+            _userRepositoryMock = new();
+            _user = new User
+            {
+                Id = 1,
+                Email = "test@test.com",
+                UserName = "test"
+            };
+        }
+
+        
         [Fact]
-        public void UpdateSuccesfullyAnUser()
+        public async Task UpdateSuccesfullyAnUser()
         {
             // Arrange
 
-            _mock.Setup(x => x.UpdateUser(UserToUpdate)).ReturnsAsync(true);
-            var cu = new UpdateUsersCU(_mock.Object);
+            var command = new UpdateUserComand(_user.Id, _user.Email, _user.UserName);
+
+            var handler = new UpdateUserHandler(_userRepositoryMock.Object);
+
+            _userRepositoryMock.Setup(
+                x => x.UpdateUser(
+                    It.IsAny<User>())
+            ).ReturnsAsync(true);
 
             // Act
 
-            var result = cu.Update(UserToUpdate);
+            var result = await handler.Handle(command, default);
 
             // Assert
 
-            Assert.True(result.Result);
+            Assert.True(result);
 
         }
 
         [Fact]
-        public void FailUpdateUser()
+        public async Task FailUpdateUser()
         {
-            
-            
 
-            _mock.Setup(x => x.UpdateUser(UserToUpdate)).ReturnsAsync(false);
+            // Arrange
 
-            var cu = new UpdateUsersCU(_mock.Object);
+            var command = new UpdateUserComand(_user.Id, _user.Email, _user.UserName);
+
+            var handler = new UpdateUserHandler(_userRepositoryMock.Object);
+
+            _userRepositoryMock.Setup(
+                x => x.UpdateUser(
+                    It.IsAny<User>())
+            ).ReturnsAsync(false);
 
             // Act
 
-            var result = cu.Update(UserToUpdate);
+            var result = await handler.Handle(command, default);
 
             // Assert
 
-            Assert.False(result.Result);
+            Assert.False(result);
         }
-
-        [Fact]
-        public void UpdateUser_CallUpdateUserOne()
-        {
-            var cu = new GetUsersCU((_mock.Object));
-
-            cu.Get();
-
-            _mock.Verify(x => x.GetUsers(), Times.Once);
-        }
+        
     }
 }

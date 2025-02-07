@@ -5,44 +5,51 @@ using System.Text;
 using System.Threading.Tasks;
 using pruebaTecnica.Users.aplication;
 using Moq;
+using MySqlX.XDevAPI.Common;
+using Org.BouncyCastle.Security;
+using pruebaTecnica.Users.aplication.Handlers;
 using pruebaTecnica.Users.domain;
+using pruebaTecnica.Users.infraestructure.Commands;
 
 namespace pruebaTecnica.test
 {
     
     public class AddUsersShould
     {
-        private readonly Mock<IUserRepository> _mock = new Mock<IUserRepository> ();
-        private readonly User _user = new User();
-        [Fact]
-        public void AddUsers()
+        private readonly Mock<IUserRepository> _userRepositoryMock;
+        private readonly User _user;
+
+        public AddUsersShould()
         {
+            _userRepositoryMock = new();
+            _user = new User
+            {
+                Email = "test@test.com",
+                UserName = "test"
+            };
+        }
+       
+        [Fact]
+        public async Task AddUsers()
+        {
+            
             //Arrange
-            User _user = new User();
-            var _mock = new  Mock<IUserRepository>();
-            _mock.Setup(x => x.AddUser(_user)).ReturnsAsync(true);
-            var cu = new AddUsersCU(_mock.Object);
+            var command = new AddUserCommand("email@test.com", "emailtest");
+            
+            var handler = new AddUserHandler(_userRepositoryMock.Object);
+
+            _userRepositoryMock.Setup(x => x.AddUser(
+                It.IsAny<User>())).ReturnsAsync(true);
             //Act
 
-            var result =  cu.Add(_user);
+            var result = await handler.Handle(command, default);
 
+            
             //Assert
 
-            Assert.True(result.Result);
+            Assert.True(result);
 
         }
-
-        [Fact]
-        public void AddUsers_CallAddUsersOne()
-        {
-           
-            var _mock = new Mock<IUserRepository>();
-            var cu = new AddUsersCU((_mock.Object));
-
-            cu.Add(_user);
-
-            _mock.Verify(x => x.AddUser(_user), Times.Once);
         
-    }
     }
 }

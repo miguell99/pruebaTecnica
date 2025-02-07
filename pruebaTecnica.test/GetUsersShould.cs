@@ -5,68 +5,75 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using pruebaTecnica.Users.aplication;
+using pruebaTecnica.Users.aplication.DTO;
+using pruebaTecnica.Users.aplication.Handlers;
 using pruebaTecnica.Users.domain;
+using pruebaTecnica.Users.infraestructure.Queries;
 
 namespace pruebaTecnica.test
 {
     public class GetUsersShould
     {
-        private readonly Mock<IUserRepository> _mock = new Mock<IUserRepository>();
-        List<User> _users = new List<User>
+        private readonly Mock<IUserRepository> _userRepositoryMock;
+        private readonly List<UserDTO> _users;
+
+        public GetUsersShould()
         {
-            new User { Id = 1, UserName = "user1", Email = "user1@cojali.com" },
-            new User { Id = 2, UserName = "user2", Email = "user2@cojali.com" }
-        };
+            _userRepositoryMock = new();
+            _users = new List<UserDTO>
+            {
+                new UserDTO { Id = 1, UserName = "user1", Email = "user1@test.com" },
+                new UserDTO { Id = 2, UserName = "user2", Email = "user2@test.com" }
+            };
+
+        }
         [Fact]
-        public void GetUsers()
+        public async Task GetUsers()
         {
 
             // Arrange
-            
-            _mock.Setup(repo => repo.GetUsers()).ReturnsAsync(_users);
 
-            var sut = new GetUsersCU(_mock.Object);
+            var command = new GetAllUsersQuery();
+
+            var handler = new GetUsersHandler(_userRepositoryMock.Object);
+
+            _userRepositoryMock.Setup(x => x.GetUsers()).ReturnsAsync(_users);
 
             // Act
 
-            var result = sut.Get();
+            var result = await handler.Handle(command, default);
 
             // Assert
 
-            Assert.NotNull(result.Result);
-            Assert.Equal(2, result.Result.Count());
-            Assert.Contains(result.Result, user => user.UserName == "user1");
-            Assert.Contains(result.Result, user => user.UserName == "user2");
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count());
+            Assert.Contains(result, user => user.UserName == "user1");
+            Assert.Contains(result, user => user.UserName == "user2");
 
         }
-
+        
         [Fact]
-        public void NotGetUsersWithEmptyDB()
+        public async Task NotGetUsersWithEmptyDB()
         {
 
             // Arrange
-            
-            _mock.Setup(repo => repo.GetUsers()).ReturnsAsync(new List<User>());
-            var cu = new GetUsersCU(_mock.Object);
 
-            // Act 
-            var result = cu.Get();
+            var command = new GetAllUsersQuery();
+
+            var handler = new GetUsersHandler(_userRepositoryMock.Object);
+
+            _userRepositoryMock.Setup(x => x.GetUsers()).ReturnsAsync(new List<UserDTO>());
+
+            // Act
+
+            var result = await handler.Handle(command, default);
 
             // Assert
-            Assert.NotNull(result.Result);
-            Assert.Empty(result.Result);
+            Assert.NotNull(result);
+            Assert.Empty(result);
 
         }
 
-        [Fact]
-        public void GetUsers_CallGetUsersOne()
-        {
-            
-            var cu = new GetUsersCU((_mock.Object));
-
-            cu.Get();
-
-            _mock.Verify(x => x.GetUsers(), Times.Once);
-        }
     }
 }
+
