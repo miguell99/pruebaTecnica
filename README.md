@@ -17,9 +17,9 @@ Este proyecto es una API RESTful desarrollada en ASP.NET Core, que permite gesti
     Asegúrate de tener la base de datos MySQL configurada y en ejecución. Crea una base de datos llamada userdb y una tabla user con la siguiente estructura:
 ```
         CREATE TABLE user (
-            Id INT AUTO_INCREMENT PRIMARY KEY,
-            UserName VARCHAR(50) NOT NULL,
-            Email VARCHAR(100) NOT NULL
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(50) NOT NULL,
+            email VARCHAR(100) NOT NULL
         );
 ````
 3. Configura la cadena de conexión en la clase UserRepository:
