@@ -1,5 +1,7 @@
 ﻿using MySqlConnector;
 using Dapper;
+using pruebaTecnica.Users.aplication.DTO;
+
 namespace pruebaTecnica.Users.domain
 {
     public class UserRepository : IUserRepository
@@ -10,12 +12,12 @@ namespace pruebaTecnica.Users.domain
 
 
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<UserDTO>> GetUsers()
         {
             using var connection = new MySqlConnection(connectionString);
             {
                 var sql = "SELECT * FROM user";
-                return await connection.QueryAsync<User>(sql, new { });
+                return await connection.QueryAsync<UserDTO>(sql, new { });
             }
 
         }

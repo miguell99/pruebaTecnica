@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using pruebaTecnica.Users.aplication;
+using pruebaTecnica.Users.infraestructure.Queries;
 
 namespace pruebaTecnica.Users.Controllers
 {
@@ -7,17 +9,17 @@ namespace pruebaTecnica.Users.Controllers
     [Route("[controller]")]
     public class GetUsersController : ControllerBase
     {
-        private readonly GetUsersCU _getUsersCu;
+        private readonly IMediator _mediator;
 
-        public GetUsersController(GetUsersCU getUsersCu)
+        public GetUsersController(IMediator mediator)
         {
-            _getUsersCu = getUsersCu;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _getUsersCu.Get();
+            var users = await _mediator.Send(new GetAllUsersQuery());
             return Ok(users);
         }
     }

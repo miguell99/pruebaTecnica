@@ -11,9 +11,6 @@ namespace pruebaTecnica.Users.aplication
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<User>> Get()
-        { 
-            return await _userRepository.GetUsers();
-        }
+        
     }
 }
