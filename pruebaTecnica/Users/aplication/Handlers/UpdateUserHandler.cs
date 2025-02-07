@@ -1,6 +1,29 @@
-﻿namespace pruebaTecnica.Users.aplication.Handlers
+﻿using MediatR;
+using pruebaTecnica.Users.domain;
+using pruebaTecnica.Users.infraestructure.Commands;
+
+namespace pruebaTecnica.Users.aplication.Handlers
 {
-    public class UpdateUserHandler
+    public class UpdateUserHandler : IRequestHandler<UpdateUserComand, bool>
     {
+        private readonly IUserRepository _userRepository;
+
+        public UpdateUserHandler(IUserRepository userRepository)
+        {
+            _userRepository = userRepository ;
+        }
+
+        public async Task<bool> Handle(UpdateUserComand request, CancellationToken cancellationToken)
+        {
+            var user = new User
+            {
+                Id = request.Id,
+                Email = request.Email,
+                UserName = request.UsernName
+            };
+
+            return await _userRepository.UpdateUser(user);
+
+        }
     }
 }

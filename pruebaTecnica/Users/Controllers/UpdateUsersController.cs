@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using pruebaTecnica.Users.aplication;
 using pruebaTecnica.Users.domain;
+using pruebaTecnica.Users.infraestructure.Commands;
 
 namespace pruebaTecnica.Users.Controllers
 {
@@ -8,17 +10,17 @@ namespace pruebaTecnica.Users.Controllers
     [Route("[controller]")]
     public class UpdateUsersController : Controller
     {
-        private readonly UpdateUsersCU _updateUsersCu;
+        private readonly IMediator _mediator;
 
-        public UpdateUsersController(UpdateUsersCU updateUsersCu)
+        public UpdateUsersController(IMediator mediator)
         {
-            _updateUsersCu = updateUsersCu;
+            _mediator = mediator;
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody] User user)
+        public async Task<IActionResult> UpdateUser(UpdateUserComand command)
         {
-            await _updateUsersCu.Update(user);
+            await _mediator.Send(command);
             return NoContent();
         }
     }
