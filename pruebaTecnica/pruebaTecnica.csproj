@@ -16,10 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Users\domain\Handlers\" />
-    <Folder Include="Users\infraestructure\Commands\" />
-    <Folder Include="Users\infraestructure\Queries\" />
-    <Folder Include="Users\domain\DTO\" />
+    <Folder Include="Users\aplication\Handlers\" />
   </ItemGroup>
 
 </Project>
