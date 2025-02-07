@@ -7,7 +7,7 @@ namespace pruebaTecnica.Users.domain
     public class UserRepository : IUserRepository
     {
 
-        const string connectionString = "server=localhost;port=3306;database=userdb2;uid=root;password=password9";
+        const string connectionString = "server=localhost;port=3306;database=userdb;uid=root;password=password9";
 
 
 

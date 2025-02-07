@@ -14,9 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<GetUsersCU>();
-builder.Services.AddScoped<AddUsersCU>();
-builder.Services.AddScoped<UpdateUsersCU>();
+
 
 
 var app = builder.Build();
